@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="script/vue.js"  charset="utf-8"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="shortcut icon" href="sword.png">
+    <title>Name the game</title>
+  </head>
+  <body>
+    <div class="main-wrapper" id="app">
+      <header>
+        <div class="left_part">
+          <div class="burger-menu"> <span class="burgerpart"></span><span class="burgerpart"></span><span class="burgerpart"></span> </div>
+          <div class="game_logo" @click="gohome()"></div>
+          <div class="head_title" @click="gohome()">
+            {{namethegame}}
+          </div>
+        </div>
+        <div class="account_menu">
+          <div class="logged">
+            <div class="avatar">
+
+            </div>
+            <div class="accinfo">
+              <div class="box_username">
+                <span class="accstatus">♕</span> <span class="username">{{currentuser.username}}</span>
+              </div>
+              <div class="account_actions">
+                <div class="button_profile" @click="goprofile()">Open<br>Profile</div>
+                <div class="button_logout" @click="logout()">Log Out</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="question">
+              Do you have an account?
+            </div>
+            <div class="actions">
+            <div class="button_login" @click="gologin()"> Log In </div>
+            <div class="button_reg" @click="goreg()"> Sign Up </div>
+            </div>
+          </div>
+        </div>
+      </header>
+      <section>
+
+      <div class="welcome">
+        <div class="title">
+          {{namethegame}}
+        </div>
+
+        <div class="subtitle">
+          {{description}}
+        </div>
+
+        <div class="action" @click="btnplay()">
+          Play
+        </div>
+      </div>
+
+      <div class="profile">
+        <div class="userdata">
+          <div class="p_usericon">
+          </div>
+          <div class="p_right">
+            <div class="p_username">
+              {{currentuser.username}}
+            </div>
+            <div class="p_donat">
+              {{currentuser.donate}} $
+            </div>
+          </div>
+        </div>
+        <div class="saveslots">
+          <div class="slot" v-bind:id="'slot'+index" v-for="(slot, index) in saveslots">
+            <div class="slotname">
+              Slot save #{{index + 1}}
+            </div>
+            <div class="heroinfo" v-if="slot.heroname !=''">
+              <div class="heroicon"></div>
+              <div class="heroname">{{slot.heroname}}</div>
+              <div class="herostats">
+                <div class="lvl">{{slot.lvl}} LV</div>
+                <div class="money">{{slot.money}} G</div>
+                <div class="gems">{{slot.gems}} D</div>
+              </div>
+              <div class="savedata">
+                Saved: {{slot.savedate}}
+              </div>
+              <div class="playedtime">
+                Played: {{slot.timeplayed}}
+              </div>
+            </div>
+            <div class="emptyslot" v-else>
+              <h1>Empty slot</h1>
+            </div>
+            <input type="radio" name="saveradio" v-bind:id="'btn'+index">
+            <label v-bind:for="'btn'+index" @click="choose_slot(index)" class="btn_choose">Choose</label>
+          </div>
+        </div>
+        <div @click="play('player')" class="btn_play">
+          Play
+        </div>
+
+      </div>
+
+      <div class="kingmessage">
+        <div class="king_avatar">
+        </div>
+        <div class="kingname">
+          <span class="king_firstname">King</span> <span class="king_secondname">Neon</span>
+        </div>
+        <div class="message">
+          Hi! <i style="color: rgb(173, 255, 135);">Stranger</i>, are you ready for <span style="color: rgb(255, 224, 122);">new advenrure</span>!
+        </div>
+        <div class="buttons_up">
+          <div class="go_signup" @click="goreg()">this is first time here. <br> <span class="green_">Register now.</span> </div>
+          <div class="go_login" @click="gologin()">I've already been here. <br> <span class="green_">Log In.</span> </div>
+        </div>
+        <div class="login_guest" @click="play('guest')">
+          Log in as guest.
+        </div>
+      </div>
+
+      <div class="loginform">
+        <h1>Log In</h1>
+        <div class="form_inputs">
+          <input type="text" name="login" v-model.trim="loginform.username" placeholder="Nickname">
+          <span class="input_error"> Unacceptable symbols. </span>
+          <input type="password" name="password" v-model.trim="loginform.password" placeholder="Password">
+          <span class="input_error"> Unacceptable symbols. </span>
+          <br>
+          <input type="checkbox" class="checkbox" v-model.trim="loginform.savedata" id="checkbox" />
+          <label for="checkbox"> Save login data </label>
+          <br>
+        </div>
+        <div class="submit_area">
+          <h3 class="input_error">Wrong login or password.</h3>
+          <div class="btn_login" @click="login()">
+            Login
+          </div>
+        </div>
+      </div>
+
+      <div class="regform">
+        <h1>Registration</h1>
+        <div class="form_inputs">
+          <input type="text" name="login" autocomplete="on" v-model.trim="regform.username" placeholder="Nickname">
+          <span class="input_error"> Unacceptable symbols. </span>
+          <input type="email" name="email" autocomplete="on" v-model.trim="regform.email" placeholder="E-Mail">
+          <span class="input_error"> Invalid e-mail format. </span>
+          <input type="password" name="password" v-model.trim="regform.password" placeholder="Password">
+          <span class="input_error"> Unacceptable symbols. </span>
+          <input type="password" name="repassword" v-model.trim="regform.repassword" placeholder="Re-Password">
+          <span class="input_error"> Password mismatch. </span>
+          <input type="text" name="invite" autocomplete="off" pattern="выражение" v-model.trim="regform.invite" placeholder="Username who invited">
+          <span class="input_error"> Invalid Username invited </span>
+          <br>
+          <div class="btn_signup" @click="signup()">
+            Sign Up
+          </div>
+      </div>
+
+      </section>
+      <footer>
+        <div class="copyright">©2020 {{namethegame}}™. All rights reserved.</div>
+        <div class="footer_buttons">About</div>
+        <div class="footer_buttons">Contact</div>
+        <div class="footer_buttons">Developers</div>
+        <div class="footer_buttons">Careers</div>
+        <div class="footer_buttons">Help & FAQ</div>
+        <div class="footer_buttons">Advertise</div>
+        <div class="footer_buttons">Core</div>
+        <div class="footer_buttons">Members</div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<script src="script/main.js" charset="utf-8"></script>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="src/css/master.css">
+    <script src="src/js/vue.js" charset="utf-8"></script>
+    <title>Play - Some RPG game</title>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main_up">
+        <div class="left_block">
+          <h1>Player changer</h1>
+          <input type="text" name="heroname" v-model="player.heroname" placeholder="New heroname">
+          <input type="number" name="lvl" v-model="player.lvl"  placeholder="Set lvl">
+          <input type="number" name="money" v-model="player.money" placeholder="Set count of money">
+          <input type="number" name="gems" v-model="player.gems" placeholder="Set count of gems">
+          <input type="text" name="savedate" v-model="player.savedate">
+          <input type="time" name="timeplayed" v-model="player.timeplayed" value="">
+          <button type="button" name="button" @click="btn_save()">Save</button>
+        </div>
+        <div class="canvas">
+          <canvas id="canvas" width="600" height="400"></canvas>
+        </div>
+      </div>
+      <div class="main_down">
+        <div class="bottom block">
+          bottom block
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="src/js/mainvue.js" charset="utf-8"></script>
+  <script src="src/js/main.js" charset="utf-8"></script>
+</html>
